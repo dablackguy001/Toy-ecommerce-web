@@ -1,20 +1,18 @@
-/* stylelint-disable at-rule-no-unknown */
+@import url('https://fonts.googleapis.com/css2?family=Arima:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-/* stylelint-enable at-rule-no-unknown */
 
-/* ✅ Import your Google Font *after* Tailwind’s base layer */
-@import url('https://fonts.googleapis.com/css2?family=Arima:wght@300;400;500;600;700&display=swap');
 
-/* ✅ Set up your global styles */
+
+
+
 @layer base {
   body {
     font-family: 'Arima', sans-serif;
   }
-}
 
-/* ✅ Custom animations or utilities */
 @layer utilities {
   @keyframes fadeInUp {
     0% {
@@ -31,7 +29,7 @@
     animation: fadeInUp 1s ease-out forwards;
   }
 
-  /* Delay utilities */
+  
   .animation-delay-300 {
     animation-delay: 0.3s;
   }
@@ -45,4 +43,4 @@
     animation-delay: 1.2s;
   }
 }
-
+}
