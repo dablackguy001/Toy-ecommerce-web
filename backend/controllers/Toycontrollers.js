@@ -13,14 +13,19 @@ const addToy = async (req, res) => {
     const imageFilenames = req.files.map((file) => file.filename);
 
     
-    let sizes = req.body.sizes
-      ? req.body.sizes.replace(/^\[|\]$/g, "").split(",").map((s) => s.trim())
-      : [];
+    let sizes = [];
+if (Array.isArray(req.body.sizes)) {
+  sizes = req.body.sizes.map((s) => s.replace(/[()]/g, "").trim());
+} else if (typeof req.body.sizes === "string") {
+  sizes = req.body.sizes.replace(/^\[|\]$/g, "").split(",").map((s) => s.trim());
+}
 
-    
-    let colour = req.body.colour
-      ? req.body.colour.replace(/^\[|\]$/g, "").split(",").map((c) => c.trim())
-      : [];
+let colour = [];
+if (Array.isArray(req.body.colour)) {
+  colour = req.body.colour.map((c) => c.replace(/[()]/g, "").trim());
+} else if (typeof req.body.colour === "string") {
+  colour = req.body.colour.replace(/^\[|\]$/g, "").split(",").map((c) => c.trim());
+}
 
     const price = Number(req.body.price);
 

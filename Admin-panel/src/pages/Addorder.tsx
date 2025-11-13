@@ -4,6 +4,11 @@ import { useState,  } from "react";
 import type { ChangeEvent } from "react";
 import type { FormEvent } from "react";
 import { Icons } from "../assets/assets";
+import { useMutation } from "@tanstack/react-query";
+import { AddToy } from "../api/Formdata";
+
+
+
 
 interface ProductData {
   name: string;
@@ -101,10 +106,64 @@ const Addorders: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    console.log("Product ready for backend:", formData);
+    if (
+      !formData.name ||
+      !formData.price ||
+      !formData.description ||
+      !formData.category ||
+      formData.sizes.length === 0 ||
+       formData.colour.length === 0 ||
+      !formData.Toy_image||!formData.Toy_image2||!formData.Toy_image3||!formData.Toy_image4
+    ) {
+      window.alert('Please fill all fields before submitting.');
+      return
+    }
 
-    alert("Product ready to upload (check console)");
+
+
+
+    
+    
+
+
+    SubmitProduct(formData);
   };
+
+const { mutate: SubmitProduct,  isPending } = useMutation({
+    mutationFn: async (data: ProductData) => AddToy(data),
+    onSuccess: (data) => {
+      console.log('Success:', data)
+      window.alert('Product added successfully!')
+      setFormData({
+        name: "",
+        price: "",
+        description: "",
+        category: "",
+        sizes: [],
+        colour: [],
+        Toy_image: null,
+        Toy_image2: null,
+        Toy_image3: null,
+        Toy_image4: null,
+      });
+      setPreviewUrls({
+        Toy_image: "",
+        Toy_image2: "",
+        Toy_image3: "",
+        Toy_image4: "",
+      });
+    },
+
+    onError: (error: Error) => {
+      console.error('Error:', error)
+      window.alert(`Error: ${error.message}`)
+    },
+  });
+
+
+
+
+
 
   return (
     <div className=" w-[40%] mx-auto mt-10 p-6 bg-white rounded-2xl shadow-md">
@@ -211,11 +270,17 @@ const Addorders: React.FC = () => {
 </div>
 
         <button
-          type="submit"
-          className="bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-lg mt-6 font-semibold"
-        >
-          Upload Product
-        </button>
+  type="submit"
+  className={`text-white py-2 rounded-lg mt-6 font-semibold 
+    ${isPending 
+      ? 'bg-gray-500 cursor-not-allowed' 
+      : 'bg-pink-500 hover:bg-pink-600'
+    }`}
+  disabled={isPending} 
+>
+  {isPending ? 'Submitting...' : 'Upload Product'}
+</button>
+
       </form>
     </div>
   );
